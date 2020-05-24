@@ -1,14 +1,15 @@
 import S from '@sanity/desk-tool/structure-builder'
 import {
+  GoFile as Doc,
   GoMegaphone as BlogIcon,
   GoChecklist as ApprovedIcon,
   GoEye as ReviewIcon,
   GoCircleSlash as RejectedIcon,
   GoArchive as AllIcon,
-  GoPerson as AuthorIcon,
+  GoPerson as AuthorIcon
 } from 'react-icons/lib/go'
 
-import PreviewIFrame from '../../src/components/previewIFrame'
+import PreviewIFrame from '../components/previewIFrame'
 
 export const icons = {
   BlogIcon,
@@ -16,55 +17,55 @@ export const icons = {
   ReviewIcon,
   RejectedIcon,
   AllIcon,
+  Doc
 }
 
-const blog = S.listItem()
-  .title('Updates')
-  .icon(BlogIcon)
+const content = S.listItem()
+  .title('Pages')
+  .icon(Doc)
   .child(
     S.list()
-      .title('/blog')
+      .title('/content')
       .items([
         S.listItem()
-          .title('Published posts')
-          .schemaType('post')
-          .icon(BlogIcon)
+          .title('Published content')
+          .schemaType('content')
+          .icon(Doc)
           .child(
-            S.documentList('post')
-              .title('Published posts')
-              .menuItems(S.documentTypeList('post').getMenuItems())
+            S.documentList('contents')
+              .title('Published contents')
+              .menuItems(S.documentTypeList('content').getMenuItems())
               // Only show posts with publish date earlier than now and that is not drafts
-              .filter('_type == "post" && publishedAt < now() && !(_id in path("drafts.**"))')
-              .child((documentId) =>
+              .filter('_type == "content" && publishedAt < now() && !(_id in path("drafts.**"))')
+              .child(documentId =>
                 S.document()
                   .documentId(documentId)
-                  .schemaType('post')
+                  .schemaType('content')
                   .views([S.view.form(), PreviewIFrame()])
               )
           ),
-        S.documentTypeListItem('post').title('All posts').icon(AllIcon),
+        S.documentTypeListItem('content')
+          .title('All contents')
+          .icon(AllIcon),
         S.listItem()
-          .title('Posts by category')
+          .title('content by category')
           .child(
             // List out all categories
             S.documentTypeList('category')
-              .title('Posts by category')
+              .title('content by category')
               .child(catId =>
                 // List out project documents where the _id for the selected
                 // category appear as a _ref in the project’s categories array
                 S.documentList()
-                  .schemaType('post')
-                  .title('Posts')
-                  .filter(
-                    '_type == "post" && $catId in categories[]._ref'
-                  )
-                  .params({ catId })
+                  .schemaType('content')
+                  .title('contents')
+                  .filter('_type == "content" && $catId in categories[]._ref')
+                  .params({catId})
               )
-        ),
+          ),
         S.divider(),
-        S.documentTypeListItem('author').title('Authors').icon(AuthorIcon),
         S.documentTypeListItem('category').title('Categories')
       ])
   )
 
-export default blog
+export default content
