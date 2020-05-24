@@ -11,6 +11,7 @@ import author from './documents/author'
 import category from './documents/category'
 import post from './documents/post'
 import page from './documents/page'
+import content from './documents/content'
 import siteSettings from './documents/siteSettings'
 import route from './documents/route'
 
@@ -21,7 +22,7 @@ import * as plugs from './plugs'
 import plugDefaultFields from './plugs/_plugDefaultFields'
 
 // Object types
-import { instagram, videoEmbed } from './objects/embeds'
+import {instagram, videoEmbed} from './objects/embeds'
 import cta from './objects/cta'
 import bodyPortableText from './objects/bodyPortableText'
 import excerptPortableText from './objects/excerptPortableText'
@@ -32,8 +33,8 @@ import variation from './objects/variation'
 import openGraph from './objects/openGraph'
 import latex from './latex'
 
-const allPlugs = Object.values(plugs).map((plug) => {
-  return { ...plug, fields: plugDefaultFields.concat(plug.fields) }
+const allPlugs = Object.values(plugs).map(plug => {
+  return {...plug, fields: plugDefaultFields.concat(plug.fields)}
 })
 
 export default createSchema({
@@ -54,6 +55,7 @@ export default createSchema({
       post,
       navMenu,
       page,
+      content,
       category,
       author,
       mainImage,
@@ -61,7 +63,7 @@ export default createSchema({
       instagram,
       videoEmbed,
       bodyPortableText,
-      excerptPortableText,
+      excerptPortableText
     ])
-    .concat(allPlugs),
+    .concat(allPlugs)
 })
